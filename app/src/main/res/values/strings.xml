@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Flight Search</string>
+    <string name="back_button">Back</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="enter_departure_airport">Enter departure airport or IATA code</string>
+    <string name="microphone">Microphone</string>
+    <string name="clear">clear</string>
+    <string name="depart">DEPART</string>
+    <string name="arrive">ARRIVE</string>
+    <string name="favorite_route">Favorite routes</string>
+    <string name="no_favorite_route">No favorite routes yet</string>
+    <string name="flights_from">Flights from</string>
+    <string name="remove_from_favorites">"Remove from favorites"</string>
+    <string name="add_to_favorites">"Add to favorites"</string>
+
+
+
+
+</resources>
