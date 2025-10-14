@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Query
 import com.example.flightsearch.data.Airport
 import com.example.flightsearch.data.AirportRepository
+import com.example.flightsearch.data.UserPreferenceRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 
 class AirportViewModel(
     private val airportRepository: AirportRepository,
+    private val userPreferenceRepository: UserPreferenceRepository
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
@@ -55,6 +57,19 @@ class AirportViewModel(
 
     init {
         viewModelScope.launch {
+
+            viewModelScope.launch {
+                userPreferenceRepository.searchQuery.collect { savedQuery ->
+                    if (savedQuery.isNotEmpty() && _searchQuery.value.isEmpty()) {
+                        _searchQuery.value = savedQuery
+                    }
+                }
+            }
+            viewModelScope.launch {
+                _searchQuery.collect { query ->
+                    userPreferenceRepository.saveSearchQuery(query)
+                }
+            }
             launch {
                 _searchQuery.collect { query ->
                     _uiState.value = _uiState.value.copy(searchQuery = query)
@@ -90,6 +105,10 @@ class AirportViewModel(
     fun clearSelection() {
         _selectedAirport.value = null
         _searchQuery.value = ""
+        //clear saved search query
+        viewModelScope.launch {
+            userPreferenceRepository.clearSearchQuery()
+        }
     }
 }
 
