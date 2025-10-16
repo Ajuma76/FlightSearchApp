@@ -7,6 +7,8 @@
     <string name="clear">clear</string>
     <string name="depart">DEPART</string>
     <string name="arrive">ARRIVE</string>
+    <string name="collapse">collapse</string>
+    <string name="expand">expand</string>
     <string name="favorite_route">Favorite routes</string>
     <string name="no_favorite_route">No favorite routes yet</string>
     <string name="flights_from">Flights from</string>

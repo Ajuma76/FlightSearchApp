@@ -1,7 +1,8 @@
-package com.example.flightsearch.ui.Airport
+package com.example.flightsearch.ui
 
 
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
@@ -46,9 +47,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flightsearch.FlightSearchTopAppBar
 import com.example.flightsearch.R
 import com.example.flightsearch.data.Airport
-import com.example.flightsearch.ui.AppViewModelProvider
-import com.example.flightsearch.ui.Favorite.FavoriteContent
-import com.example.flightsearch.ui.Favorite.FavoriteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,8 +60,8 @@ fun AirportSearchScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     LaunchedEffect(airportUiState.selectedAirport, airportUiState.availableFlights) {
-        airportUiState.selectedAirport ?.let { departure ->
-            if (airportUiState.availableFlights.isNotEmpty()){
+        airportUiState.selectedAirport?.let { departure ->
+            if (airportUiState.availableFlights.isNotEmpty()) {
                 favoriteViewModel.updateFavoriteStatusForRoutes(
                     departureCode = departure.iataCode,
                     destinations = airportUiState.availableFlights.map { it.iataCode }
@@ -103,7 +101,7 @@ fun AirportSearchScreen(
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
-            Box (modifier = Modifier.fillMaxSize()){
+            Box(modifier = Modifier.fillMaxSize()) {
                 when {
                     airportUiState.selectedAirport != null -> {
                         FlightResultContent(
@@ -118,21 +116,21 @@ fun AirportSearchScreen(
                             }
                         )
                     }
+
                     airportUiState.searchQuery.isBlank() -> {
-                        FavoriteContent(
+                        FavoritesContent(
                             favorites = favoriteUiState.favoriteRoutes,
-                            onDeleteClick = { favorite ->
-                                favoriteViewModel.removeFavorite(
-                                    favorite.departureCode,
-                                    favorite.destinationCode
-                                )
-                            }
+                            onToggleFavorite = { departureCode, destinationCode ->
+                                favoriteViewModel.removeFavorite(departureCode, destinationCode)
+                            },
+                            airportViewModel = airportViewModel
                         )
                     }
                 }
+
                 androidx.compose.animation.AnimatedVisibility(
                     visible = airportUiState.autoCompleteSuggestions.isNotEmpty() &&
-                    airportUiState.searchQuery.isNotBlank(),
+                            airportUiState.searchQuery.isNotBlank(),
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -291,6 +289,7 @@ fun FlightItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
                 IconButton(onClick = onFavoriteClick) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.Star,
@@ -300,7 +299,6 @@ fun FlightItem(
                         else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            }
         }
     }
 }

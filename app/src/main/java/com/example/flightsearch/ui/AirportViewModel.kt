@@ -1,13 +1,11 @@
-package com.example.flightsearch.ui.Airport
+package com.example.flightsearch.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.Query
 import com.example.flightsearch.data.Airport
 import com.example.flightsearch.data.AirportRepository
 import com.example.flightsearch.data.UserPreferenceRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -109,6 +107,10 @@ class AirportViewModel(
         viewModelScope.launch {
             userPreferenceRepository.clearSearchQuery()
         }
+    }
+
+    suspend fun getAirportByCode(code: String): Airport? {
+        return airportRepository.getAirportsByCode(code)
     }
 }
 

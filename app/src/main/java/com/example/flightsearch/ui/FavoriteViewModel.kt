@@ -1,4 +1,4 @@
-package com.example.flightsearch.ui.Favorite
+package com.example.flightsearch.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,8 +21,6 @@ class FavoriteViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
-
-    private val _favoriteStatus = MutableStateFlow<Map<String, Boolean>>(emptyMap())
 
     private val _uiState = MutableStateFlow(FavoriteUiState())
     val uiState : StateFlow<FavoriteUiState> = _uiState.asStateFlow()
@@ -75,7 +73,6 @@ class FavoriteViewModel(
             _uiState.value = _uiState.value.copy(favoriteStatus = statusMap)
         }
     }
-
 
     private fun updateFavoriteStatusInMap(
         departureCode: String,
